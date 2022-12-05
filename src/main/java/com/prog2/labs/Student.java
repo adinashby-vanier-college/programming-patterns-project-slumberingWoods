@@ -74,6 +74,56 @@ public class Student {
         }
         return books;
     }
+        public List<Book> searchBookByName(String name) throws SQLException {
+        String query = "select * from Books where Author = " + name;
+        List<Book> books = new ArrayList<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String SN = rs.getString("SN");
+                String tempTitle = rs.getString("Title");
+                String author = rs.getString("Author");
+                String publisher = rs.getString("Publisher");
+                double price = Double.parseDouble(rs.getString("Price"));
+                int qte = Integer.parseInt(rs.getString("Quantity"));
+                int issuedQte = Integer.parseInt(rs.getString("Issued"));
+                String tempDate = rs.getString("addedDate");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate localDate = LocalDate.parse(tempDate, formatter);
+                Book tempBook = new Book(SN, tempTitle, author, publisher, price, qte, issuedQte, localDate);
+                books.add(tempBook);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        return books;
+    }
+    public List<Book> searchBookByPublisher(String publisher) throws SQLException {
+        String query = "select * from Books where Publisher = " + publisher;
+        List<Book> books = new ArrayList<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String SN = rs.getString("SN");
+                String tempTitle = rs.getString("Title");
+                String author = rs.getString("Author");
+                String tempPublisher = rs.getString("Publisher");
+                double price = Double.parseDouble(rs.getString("Price"));
+                int qte = Integer.parseInt(rs.getString("Quantity"));
+                int issuedQte = Integer.parseInt(rs.getString("Issued"));
+                String tempDate = rs.getString("addedDate");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate localDate = LocalDate.parse(tempDate, formatter);
+                Book tempBook = new Book(SN, tempTitle, author, tempPublisher, price, qte, issuedQte, localDate);
+                books.add(tempBook);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        return books;
+    }
     public boolean borrow(Book book) throws SQLException {
         String query = "Insert into IssuedBooks VALUES(" + book.SN + "," + 
                 this.stId + "," + this.name + "," + this.contactNumber + "," + 
