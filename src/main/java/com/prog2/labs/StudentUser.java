@@ -15,6 +15,7 @@ public class StudentUser implements User {
     }
     @Override
     public void createForm() {
-        
+        StudentForm form = new StudentForm();
+        form.setVisible(true);
     }
 }

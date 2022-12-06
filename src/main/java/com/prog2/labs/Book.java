@@ -5,6 +5,8 @@
 package com.prog2.labs;
 import java.sql.*;
 import java.time.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -135,5 +137,51 @@ public class Book {
             System.err.println("Got an exception!"); 
         }
         return false;
+    }
+    public static Map<String, String> viewCatalog() {
+        String query = "select * from Books";
+        Map<String, String> books = new TreeMap<>();
+        Connection tempcon = DatabaseConnection.getConnection();
+        try (Statement stmt = tempcon.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String key = rs.getString("SN");
+                String value = rs.getString("SN");
+                value += " , " + rs.getString("Title");
+                value += " , " + rs.getString("Author");
+                value += " , " + rs.getString("Publisher");
+                value += " , " + rs.getString("Price");
+                value += " , " + rs.getString("Quantity");
+                value += " , " + rs.getString("Issued");
+                value += " , " + rs.getString("addedDate");
+                books.put(key, value);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        return books;
+    }
+    public static Map<String, String> viewIssuedBooks() {
+        String query = "select * from IssuedBooks";
+        Map<String, String> books = new TreeMap<>();
+        Connection tempcon = DatabaseConnection.getConnection();
+        try (Statement stmt = tempcon.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String key = rs.getString("SN");
+                String value = rs.getString("id");
+                value += " , " + rs.getString("SN");
+                value += " , " + rs.getString("StId");
+                value += " , " + rs.getString("StName");
+                value += " , " + rs.getString("StudentContact");
+                value += " , " + rs.getString("IssueDate");
+                books.put(key, value);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        return books;
     }
 }

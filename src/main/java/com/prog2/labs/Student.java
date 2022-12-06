@@ -7,8 +7,7 @@ package com.prog2.labs;
 import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -74,7 +73,7 @@ public class Student {
         }
         return books;
     }
-        public List<Book> searchBookByName(String name) throws SQLException {
+    public List<Book> searchBookByName(String name) throws SQLException {
         String query = "select * from Books where Author = " + name;
         List<Book> books = new ArrayList<>();
         try (Statement stmt = con.createStatement()) {
@@ -113,7 +112,7 @@ public class Student {
                 int qte = Integer.parseInt(rs.getString("Quantity"));
                 int issuedQte = Integer.parseInt(rs.getString("Issued"));
                 String tempDate = rs.getString("addedDate");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate localDate = LocalDate.parse(tempDate, formatter);
                 Book tempBook = new Book(SN, tempTitle, author, tempPublisher, price, qte, issuedQte, localDate);
                 books.add(tempBook);
@@ -151,5 +150,37 @@ public class Student {
             System.err.println("Got an exception!"); 
         }
         return false;
+    }
+    public Map<String, String> viewCatalog() {
+        String query = "select * from Books";
+        Map<String, String> books = new TreeMap<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String key = rs.getString("SN");
+                String value = rs.getString("SN");
+                value += " , " + rs.getString("Title");
+                value += " , " + rs.getString("Author");
+                value += " , " + rs.getString("Publisher");
+                value += " , " + rs.getString("Price");
+                value += " , " + rs.getString("Quantity");
+                value += " , " + rs.getString("Issued");
+                value += " , " + rs.getString("addedDate");
+                books.put(key, value);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        Set s = books.entrySet();
+        Iterator i = s.iterator();
+        while (i.hasNext()) {
+            Map.Entry m = (Map.Entry)i.next();
+            String key = (String)m.getKey();
+            String value = (String)m.getValue();
+            System.out.println("Key : " + key
+                    + "  value : " + value);
+        }
+        return books;
     }
 }

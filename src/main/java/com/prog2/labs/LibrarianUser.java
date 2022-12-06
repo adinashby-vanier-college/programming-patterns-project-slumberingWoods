@@ -21,7 +21,8 @@ public class LibrarianUser implements User{
     }
     @Override
     public void createForm() {
-        
+        LibrarianForm form = new LibrarianForm();
+        form.setVisible(true);
     }
     public ArrayList<Student> getStudents() {
         return students;
