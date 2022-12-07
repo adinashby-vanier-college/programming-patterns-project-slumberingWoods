@@ -21,22 +21,7 @@ public class UserFactory {
                 return new StudentUser();
             }
             case "Librarian" -> {
-                Connection con = DatabaseConnection.getConnection();
-                String query = "select * from Students";
-                ArrayList<Student> students = new ArrayList<>();
-                try (Statement stmt = con.createStatement()) {
-                    ResultSet rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        String id = rs.getString("StudentId");
-                        String name = rs.getString("Name");
-                        String contact = rs.getString("Contact");
-                        Student tempStudent = new Student(id, name, contact);
-                        students.add(tempStudent);
-                    }
-                } catch (SQLException e) {
-                    System.out.println("Error");
-                }
-                return new LibrarianUser(students);
+                return new LibrarianUser();
             }
             default -> throw new Exception();
         }

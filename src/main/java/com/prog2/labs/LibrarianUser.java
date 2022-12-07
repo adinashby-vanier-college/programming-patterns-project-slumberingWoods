@@ -4,16 +4,12 @@
  */
 package com.prog2.labs;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author hallo
  */
 public class LibrarianUser implements User{
-    ArrayList<Student> students;
-    public LibrarianUser(ArrayList<Student> students) {
-        this.students = students;
+    public LibrarianUser() {
     }   
     @Override
     public String getPermission() {
@@ -23,12 +19,5 @@ public class LibrarianUser implements User{
     public void createForm() {
         LibrarianForm form = new LibrarianForm();
         form.setVisible(true);
-    }
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
-    public void setStudents(ArrayList<Student> students) {
-        this.students = students;
-    }
-    
+    }   
 }
