@@ -9,7 +9,9 @@ package com.prog2.labs;
  * @author hallo
  */
 public class LibrarianUser implements User{
+    LibrarianForm form;
     public LibrarianUser() {
+        form = new LibrarianForm();
     }   
     @Override
     public String getPermission() {
@@ -17,7 +19,11 @@ public class LibrarianUser implements User{
     }
     @Override
     public void createForm() {
-        LibrarianForm form = new LibrarianForm();
         form.setVisible(true);
     }   
+
+    @Override
+    public void hideForm() {
+        form.setVisible(false);
+    }
 }

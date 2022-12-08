@@ -9,13 +9,22 @@ package com.prog2.labs;
  * @author hallo
  */
 public class StudentUser implements User {
+    StudentForm form;
+    public StudentUser() {
+        form = new StudentForm();
+    }
+    
     @Override
     public String getPermission() {
         return "student";
     }
     @Override
     public void createForm() {
-        StudentForm form = new StudentForm();
         form.setVisible(true);
     }
+    @Override
+    public void hideForm() {
+        form.setVisible(false);
+    }
+    
 }

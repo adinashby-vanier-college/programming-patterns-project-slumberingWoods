@@ -9,28 +9,29 @@ package com.prog2.labs;
  * @author hallo
  */
 public class ViewController {
-    LibrarianForm lForm;
-    StudentForm sForm;
     PickUser pForm;
+    User user;
 
-    public ViewController(LibrarianForm lForm, StudentForm sForm, PickUser pForm) {
-        this.lForm = lForm;
-        this.sForm = sForm;
+    public ViewController(PickUser pForm) {
         this.pForm = pForm;
     }
+    public ViewController(User user, PickUser pForm) {
+        this.user = user;
+        this.pForm = pForm;
+    }
+
     public void showPForm() {
         pForm.setVisible(true);
-        sForm.setVisible(false);
-        lForm.setVisible(false);
     }
-    public void showLForm() {
-        lForm.setVisible(true);
-        pForm.setVisible(false);
-        sForm.setVisible(false);
-    }
-    public void showSForm() {
-        sForm.setVisible(true);
-        lForm.setVisible(false);
+    public void hidePForm() {
         pForm.setVisible(false);
     }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
 }

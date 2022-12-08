@@ -120,13 +120,14 @@ public class Student {
             stmt.close();
         } catch (SQLException e) {
             System.out.println("Error");
+            System.out.println(e);
         }
         return books;
     }
     public boolean borrow(Book book) throws SQLException {
-        String query = "Insert into IssuedBooks VALUES(" + book.SN + "," + 
-                this.stId + "," + this.name + "," + this.contactNumber + "," + 
-                LocalDate.now().toString() + "," + ")";
+        String query = "Insert into IssuedBooks(SN, StId, StName, StudentContact, IssueDate) VALUES('" + book.SN + "','" + 
+                this.stId + "','" + this.name + "','" + this.contactNumber + "','" + 
+                LocalDate.now().toString() + "')";
         String query2 = "Update Books set Quantity = Quantity - 1, Issued = Issued + 1 where SN = " + book.SN; 
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate(query);
@@ -135,6 +136,7 @@ public class Student {
             return true;
         } catch (Exception e) {
             System.err.println("Got an exception!"); 
+            System.out.println(e);
         }
         return false;
     }
@@ -147,7 +149,8 @@ public class Student {
             stmt.close();
             return true;
         } catch (Exception e) {
-            System.err.println("Got an exception!"); 
+            System.err.println("Got an exception!");
+            System.out.println(e);
         }
         return false;
     }
@@ -171,6 +174,7 @@ public class Student {
             stmt.close();
         } catch (SQLException e) {
             System.out.println("Error");
+            System.out.println(e);
         }
         Set s = books.entrySet();
         Iterator i = s.iterator();
@@ -182,5 +186,19 @@ public class Student {
                     + "  value : " + value);
         }
         return books;
+    }
+    public boolean addStudent(Student student) throws SQLException {
+        String query = "insert into Students (StudentId, Name, Contact) VALUES('" + student.stId + "','" + student.name
+                + "','" + student.contactNumber + "');";
+        System.out.println(query);
+        try (Statement stmt = con.createStatement()) {
+            stmt.executeUpdate(query);
+            stmt.close();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Got an exception!"); 
+            System.out.println(e);
+        }
+        return false;
     }
 }

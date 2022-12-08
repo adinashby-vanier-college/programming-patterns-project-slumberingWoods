@@ -38,6 +38,7 @@ public class LibraryController {
         books = new ArrayList<>();
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(query2);
+            System.out.println(rs.toString());
             while (rs.next()) {
                 String SN = rs.getString("SN");
                 String tempTitle = rs.getString("Title");
@@ -140,5 +141,4 @@ public class LibraryController {
     public LocalDate getBookDate(int index) {
         return books.get(index).getDateOfPurchase();
     }
-    
 }

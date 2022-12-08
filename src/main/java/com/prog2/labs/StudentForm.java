@@ -55,7 +55,6 @@ public class StudentForm extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(700, 300));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -326,6 +325,7 @@ public class StudentForm extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         Controller.getInstance().getViCon().showPForm();
+        Controller.getInstance().getViCon().getUser().hideForm();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

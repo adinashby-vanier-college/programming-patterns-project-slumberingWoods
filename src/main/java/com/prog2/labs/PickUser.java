@@ -4,6 +4,9 @@
  */
 package com.prog2.labs;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author hallo
@@ -79,11 +82,23 @@ public class PickUser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Controller.getInstance().getViCon().showSForm();
+        try {
+            Controller.getInstance().getViCon().setUser(Controller.getInstance().getFac().GetUser("Student"));
+            Controller.getInstance().getViCon().getUser().createForm();
+            Controller.getInstance().getViCon().hidePForm();
+        } catch (Exception ex) {
+            Logger.getLogger(PickUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Controller.getInstance().getViCon().showLForm();
+        try {
+            Controller.getInstance().getViCon().setUser(Controller.getInstance().getFac().GetUser("Librarian"));
+            Controller.getInstance().getViCon().getUser().createForm();
+            Controller.getInstance().getViCon().hidePForm();
+        } catch (Exception ex) {
+            Logger.getLogger(PickUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

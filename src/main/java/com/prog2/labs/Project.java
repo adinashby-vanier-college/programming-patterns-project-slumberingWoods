@@ -39,18 +39,16 @@ public class Project {
                 System.out.println("Error");
             }
             System.out.println(books.toString());
+
+            PickUser pForm = new PickUser();
             
-            LibrarianForm lForm = new LibrarianForm();
-            StudentForm sForm = new StudentForm();
-            PickUser vForm = new PickUser();
-            
-            ViewController viCon = new ViewController(lForm, sForm, vForm);
+            ViewController viCon = new ViewController(pForm);
             LibraryController libCon = new LibraryController();
             UserFactory fac = new UserFactory();
-            Controller controller = new Controller(libCon, viCon, fac);
+            Controller controller;
             controller = Controller.getInstance(libCon, viCon, fac);
-           
             controller.getViCon().showPForm();
+            
 	}
 	/**
 	 * Please refer to the README file for question(s) description

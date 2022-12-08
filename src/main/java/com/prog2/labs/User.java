@@ -11,4 +11,5 @@ package com.prog2.labs;
 public interface User {
     public String getPermission();
     public void createForm();
+    public void hideForm();
 }

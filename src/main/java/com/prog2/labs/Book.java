@@ -5,6 +5,7 @@
 package com.prog2.labs;
 import java.sql.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,6 +33,8 @@ public class Book {
         this.qte = qte;
         this.issuedQte = issuedQte;
         this.DateOfPurchase = DateOfPurchase;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateOfPurchase.format(formatter);
     }
 
     public String getSN() {
@@ -98,22 +101,24 @@ public class Book {
         this.DateOfPurchase = DateOfPurchase;
     }
     public boolean addBook(Book book) throws SQLException {
-        String query = "insert into Books VALUES(" + book.SN + "," + book.title 
-                + "," + book.author + "," + book.publisher + "," + book.qte 
-                + "," + book.issuedQte + "," + book.DateOfPurchase.toString() + ")";
+        String query = "insert into Books(SN, Title, Author, Publisher, Price, Quantity, Issued, addedDate) VALUES('" + book.SN + "','" + book.title 
+                + "','" + book.author + "','" + book.publisher + "','" + book.price + "','" + book.qte 
+                + "','" + book.issuedQte + "','" + book.DateOfPurchase.toString() + "')";
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate(query);
             stmt.close();
             return true;
         } catch (Exception e) {
             System.err.println("Got an exception!"); 
+            System.out.println(query);
+            System.out.println(e);
         }
         return false;
     }
     public boolean issueBook(Book book, Student s) throws SQLException {
-        String query = "Insert into IssuedBooks VALUES(" + book.SN + "," + 
-                s.stId + "," + s.name + "," + s.contactNumber + "," + 
-                LocalDate.now().toString() + "," + ")";
+        String query = "Insert into IssuedBooks(SN, StId, StName, StudentContact, IssueDate) VALUES('" + book.SN + "','" + 
+                s.stId + "','" + s.name + "','" + s.contactNumber + "','" + 
+                LocalDate.now().toString() + "','" + "')";
         String query2 = "Update Books set Quantity = Quantity - 1, Issued = Issued + 1 where SN = " + book.SN; 
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate(query);
@@ -122,6 +127,7 @@ public class Book {
             return true;
         } catch (Exception e) {
             System.err.println("Got an exception!"); 
+            System.out.println(e);
         }
         return false;
     }
@@ -135,6 +141,7 @@ public class Book {
             return true;
         } catch (Exception e) {
             System.err.println("Got an exception!"); 
+            System.out.println(e);
         }
         return false;
     }
@@ -159,6 +166,7 @@ public class Book {
             stmt.close();
         } catch (SQLException e) {
             System.out.println("Error");
+            System.out.println(e);
         }
         return books;
     }
@@ -181,6 +189,7 @@ public class Book {
             stmt.close();
         } catch (SQLException e) {
             System.out.println("Error");
+            System.out.println(e);
         }
         return books;
     }
