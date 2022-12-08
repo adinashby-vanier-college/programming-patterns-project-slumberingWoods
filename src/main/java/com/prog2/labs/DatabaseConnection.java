@@ -13,7 +13,10 @@ class DatabaseConnection {
 
     private DatabaseConnection() {
     }
-    
+    /**
+     * 
+     * @return 
+     */
     static Connection getConnection() {
         //Singleton Pattern
         if(con == null) {
@@ -22,7 +25,7 @@ class DatabaseConnection {
                 Connection con = DriverManager.getConnection("jdbc:sqlite:Library.db");
                 System.out.println("success");
                 return con;
-            } catch(Exception e) {
+            } catch(ClassNotFoundException | SQLException e) {
                 System.out.println("failure");
                 return null;
             }

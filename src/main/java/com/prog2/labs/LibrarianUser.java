@@ -26,4 +26,9 @@ public class LibrarianUser implements User{
     public void hideForm() {
         form.setVisible(false);
     }
+
+    @Override
+    public int getId() {
+        return -1;
+    }
 }

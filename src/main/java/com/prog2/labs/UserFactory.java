@@ -15,10 +15,17 @@ import java.util.ArrayList;
  * @author hallo
  */
 public class UserFactory {
-    public User GetUser(String user) throws Exception {
+    /**
+     * 
+     * @param user
+     * @param id
+     * @return
+     * @throws Exception 
+     */
+    public User GetUser(String user, int id) throws Exception {
         switch (user) {
             case "Student" -> {
-                return new StudentUser();
+                return new StudentUser(id);
             }
             case "Librarian" -> {
                 return new LibrarianUser();

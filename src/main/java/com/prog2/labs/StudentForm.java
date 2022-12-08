@@ -4,19 +4,60 @@
  */
 package com.prog2.labs;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author hallo
  */
 public class StudentForm extends javax.swing.JFrame {
-
+    private ResourceBundle bundle;
+    private ResourceBundle bundleFR;
     /**
      * Creates new form StudentForm
      */
     public StudentForm() {
         initComponents();
+        bundle = ResourceBundle.getBundle("FormLanguage");
+        bundleFR = ResourceBundle.getBundle("FormLanguage", Locale.FRANCE);
     }
-
+    /**
+     * Update the table using the current books stored
+     */
+    public void data_update() {
+        DefaultTableModel model = (DefaultTableModel) bookTable.getModel();
+        model.setRowCount(0);
+        Controller.getInstance().getLibCon().updateArrays();
+        ArrayList<Book> books = Controller.getInstance().getLibCon().getBooks();
+        for(Book b: books) {
+            Object[] o = new Object[]{b.getSN(), b.getTitle(), b.getAuthor(), b.getPublisher(), b.getPrice(), b.getQte(), b.getIssuedQte(), b.getDateOfPurchase().toString()};
+            model.addRow(o);
+        }
+        model.fireTableDataChanged();
+    }
+    /**
+     * Update the table using listed books
+     * @param books 
+     */
+    public void jTable_update(List<Book> books) {
+        DefaultTableModel model = (DefaultTableModel) bookTable.getModel();
+        model.setRowCount(0);
+        Controller.getInstance().getLibCon().updateArrays();
+        for(Book b: books) {
+            Object[] o = new Object[]{b.getSN(), b.getTitle(), b.getAuthor(), b.getPublisher(), b.getPrice(), b.getQte(), b.getIssuedQte(), b.getDateOfPurchase().toString()};
+            model.addRow(o);
+        }
+        model.fireTableDataChanged();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,46 +68,67 @@ public class StudentForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        searchLabel = new javax.swing.JLabel();
+        comboBox1 = new javax.swing.JComboBox<>();
+        searchByLabel = new javax.swing.JLabel();
+        searchText = new javax.swing.JTextField();
+        nameLabel = new javax.swing.JLabel();
+        searchButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        bookTable = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        viewBButton = new javax.swing.JButton();
+        viewIButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
+        textArea = new javax.swing.JTextArea();
+        viewLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jButton6 = new javax.swing.JButton();
+        engButton = new javax.swing.JRadioButton();
+        fraButton = new javax.swing.JRadioButton();
+        selectionButton = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
+        bOrBLabel = new javax.swing.JLabel();
+        comboBox2 = new javax.swing.JComboBox<>();
+        actionLabel = new javax.swing.JLabel();
+        SNText = new javax.swing.JTextField();
+        SNLabel = new javax.swing.JLabel();
+        performButton = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        outputArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setText("Seach Books");
+        searchLabel.setText("Seach Books");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Title", "Author", "Publisher" }));
+        comboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Title", "Author", "Publisher" }));
 
-        jLabel2.setText("Seach by");
+        searchByLabel.setText("Seach by");
 
-        jLabel3.setText("Name");
+        nameLabel.setText("Name");
 
-        jButton1.setText("Search");
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
+        resetButton.setText("Reset Table");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -75,37 +137,42 @@ public class StudentForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
-                .addContainerGap(87, Short.MAX_VALUE))
+                    .addComponent(resetButton)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(searchByLabel)
+                            .addComponent(nameLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(searchButton)
+                            .addComponent(searchLabel)
+                            .addComponent(comboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(searchText))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(searchLabel)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchByLabel)
+                    .addComponent(comboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nameLabel))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addComponent(searchButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(resetButton)
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        bookTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -131,9 +198,9 @@ public class StudentForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(7).setPreferredWidth(120);
+        jScrollPane1.setViewportView(bookTable);
+        if (bookTable.getColumnModel().getColumnCount() > 0) {
+            bookTable.getColumnModel().getColumn(7).setPreferredWidth(120);
         }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -155,15 +222,26 @@ public class StudentForm extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton2.setText("View Books");
+        viewBButton.setText("View Books");
+        viewBButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewBButtonActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("View Issued Books");
+        viewIButton.setText("View Issued Books");
+        viewIButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewIButtonActionPerformed(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        textArea.setColumns(20);
+        textArea.setLineWrap(true);
+        textArea.setRows(5);
+        jScrollPane2.setViewportView(textArea);
 
-        jLabel4.setText("View Catelogue");
+        viewLabel.setText("View Catalogue");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -174,23 +252,23 @@ public class StudentForm extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(viewBButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5))
+                        .addComponent(viewIButton))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(viewLabel)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(viewLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton5))
+                    .addComponent(viewBButton)
+                    .addComponent(viewIButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -198,10 +276,20 @@ public class StudentForm extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("English");
+        engButton.setSelected(true);
+        engButton.setText("English");
+        engButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                engButtonActionPerformed(evt);
+            }
+        });
 
-        jRadioButton2.setText("French");
+        fraButton.setText("French");
+        fraButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fraButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -210,38 +298,43 @@ public class StudentForm extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addContainerGap(111, Short.MAX_VALUE))
+                    .addComponent(engButton)
+                    .addComponent(fraButton))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton1)
+                .addComponent(engButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addComponent(fraButton)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        jButton6.setText("Return to selection");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        selectionButton.setText("Return to selection");
+        selectionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                selectionButtonActionPerformed(evt);
             }
         });
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setText("Borrow or Return Books");
+        bOrBLabel.setText("Borrow or Return Books");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Borrow", "Return" }));
+        comboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Borrow", "Return" }));
 
-        jLabel6.setText("Action");
+        actionLabel.setText("Action");
 
-        jLabel7.setText("SN");
+        SNLabel.setText("SN");
 
-        jButton7.setText("Perform");
+        performButton.setText("Perform");
+        performButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -250,32 +343,55 @@ public class StudentForm extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(actionLabel)
+                    .addComponent(SNLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton7)
-                    .addComponent(jLabel5)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(performButton)
+                    .addComponent(bOrBLabel)
+                    .addComponent(comboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SNText))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
+                .addComponent(bOrBLabel)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(actionLabel)
+                    .addComponent(comboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(SNText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SNLabel))
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(performButton)
                 .addGap(0, 18, Short.MAX_VALUE))
+        );
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        outputArea.setColumns(20);
+        outputArea.setRows(5);
+        jScrollPane3.setViewportView(outputArea);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,29 +401,29 @@ public class StudentForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(selectionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(selectionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -323,10 +439,176 @@ public class StudentForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void selectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionButtonActionPerformed
         Controller.getInstance().getViCon().showPForm();
         Controller.getInstance().getViCon().getUser().hideForm();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_selectionButtonActionPerformed
+
+    private void performButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performButtonActionPerformed
+        int id = Controller.getInstance().getViCon().getUser().getId();
+        if(comboBox2.getSelectedItem().toString().equals("Borrow")) {
+            try {
+                ArrayList<Book> books = Controller.getInstance().getLibCon().getBooks();
+                ArrayList<Student> students = Controller.getInstance().getLibCon().getStudents();
+                Book tempBook = null;
+                Student tempStudent = null;
+                for (Book b : books) {
+                    if (b.getSN().equals(SNText.getText())) {
+                        tempBook = b;
+                    }
+                }
+                for (Student s : students) {
+                    if (s.getStId() == id) {
+                        tempStudent = s;
+                    }
+                }
+                if(tempBook != null && tempStudent != null) {
+                    tempBook.issueBook(tempBook, tempStudent);
+                    outputArea.setText("Book Borrowed");
+                } else
+                    outputArea.setText("No book or student");
+            } catch (SQLException ex) {
+                outputArea.setText("Error");
+            }
+        } else if (comboBox2.getSelectedItem().toString().equals("Return")) {
+            try {
+                ArrayList<Book> books = Controller.getInstance().getLibCon().getBooks();
+                ArrayList<Student> students = Controller.getInstance().getLibCon().getStudents();
+                Book tempBook = null;
+                Student tempStudent = null;
+                for (Book b : books) {
+                    if (b.getSN().equals(SNText.getText())) {
+                        tempBook = b;
+                    }
+                }
+                for (Student s : students) {
+                    if (s.getStId() == id) {
+                        tempStudent = s;
+                    }
+                }
+                if(tempBook != null && tempStudent != null) {
+                    tempBook.returnBook(tempBook, tempStudent);
+                    outputArea.setText("Book returned");
+                }else
+                    outputArea.setText("No book or student");
+            } catch (SQLException ex) {
+                outputArea.setText("Error");
+            }
+        }
+    }//GEN-LAST:event_performButtonActionPerformed
+
+    private void viewIButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewIButtonActionPerformed
+        textArea.setText("");
+        Map<String, String> map = Book.viewIssuedBooks();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            textArea.append(entry.toString() +"\n");
+        }
+    }//GEN-LAST:event_viewIButtonActionPerformed
+
+    private void viewBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewBButtonActionPerformed
+        textArea.setText("");
+        Map<String, String> map = Book.viewCatalog();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            textArea.append(entry.toString() +"\n");
+        }
+    }//GEN-LAST:event_viewBButtonActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        Student student = Controller.getInstance().getLibCon().getStudents().get(0);
+        List<Book> books;
+        String text = comboBox1.getSelectedItem().toString();
+        System.out.println(text);
+        switch(text) {
+            case "Title" -> {
+                try {
+                    books = student.searchBookByTitle(searchText.getText());
+                    jTable_update(books);
+                    break;
+                } catch (SQLException ex) {
+                    outputArea.setText("Error");
+                }
+            }
+
+            case "Author" -> {
+                try {
+                    books = student.searchBookByName(searchText.getText());
+                    jTable_update(books);
+                    break;
+                } catch (SQLException ex) {
+                    outputArea.setText("Error");
+                }
+                break;
+            }
+            case "Publisher" -> {
+                try {
+                    books = student.searchBookByPublisher(searchText.getText());
+                    jTable_update(books);
+                    break;
+                } catch (SQLException ex) {
+                    outputArea.setText("Error");
+                }
+                break;
+            }
+            default -> {
+                outputArea.setText("Error");
+                break;
+            }
+        }
+        
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        data_update();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        data_update();
+        outputArea.setText("Table reset");
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void engButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_engButtonActionPerformed
+        fraButton.setSelected(false);
+        String[] strings = {bundle.getString("Title"), bundle.getString("Author"), bundle.getString("Publisher")};
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(strings);
+        comboBox1.setModel(model);
+        engButton.setText(bundle.getString("English"));
+        fraButton.setText(bundle.getString("French"));
+        nameLabel.setText(bundle.getString("Name"));
+        viewLabel.setText(bundle.getString("ViewCatalogue"));
+        viewBButton.setText(bundle.getString("ViewBooks"));
+        viewIButton.setText(bundle.getString("ViewIssuedBooks"));
+        searchByLabel.setText(bundle.getString("SearchBy"));
+        searchButton.setText(bundle.getString("Search"));
+        resetButton.setText(bundle.getString("ResetTable"));
+        SNLabel.setText(bundle.getString("SN"));
+        performButton.setText(bundle.getString("Perform"));
+        selectionButton.setText(bundle.getString("ReturnToSelection"));
+        String[] strings2 = {bundle.getString("Borrow"), bundle.getString("Return")};
+        DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>(strings2);
+        comboBox2.setModel(model2);
+    }//GEN-LAST:event_engButtonActionPerformed
+
+    private void fraButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fraButtonActionPerformed
+        engButton.setSelected(false);
+        String[] strings = {bundleFR.getString("Title"), bundleFR.getString("Author"), bundleFR.getString("Publisher")};
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(strings);
+        comboBox1.setModel(model);
+        engButton.setText(bundleFR.getString("English"));
+        fraButton.setText(bundleFR.getString("French"));
+        nameLabel.setText(bundleFR.getString("Name"));
+        viewLabel.setText(bundleFR.getString("ViewCatalogue"));
+        viewBButton.setText(bundleFR.getString("ViewBooks"));
+        viewIButton.setText(bundleFR.getString("ViewIssuedBooks"));
+        searchByLabel.setText(bundleFR.getString("SearchBy"));
+        searchButton.setText(bundleFR.getString("Search"));
+        resetButton.setText(bundleFR.getString("ResetTable"));
+        SNLabel.setText(bundleFR.getString("SN"));
+        performButton.setText(bundleFR.getString("Perform"));
+        selectionButton.setText(bundleFR.getString("ReturnToSelection"));
+        String[] strings2 = {bundleFR.getString("Borrow"), bundleFR.getString("Return")};
+        DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>(strings2);
+        comboBox2.setModel(model2);
+    }//GEN-LAST:event_fraButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,32 +646,36 @@ public class StudentForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel SNLabel;
+    private javax.swing.JTextField SNText;
+    private javax.swing.JLabel actionLabel;
+    private javax.swing.JLabel bOrBLabel;
+    private javax.swing.JTable bookTable;
+    private javax.swing.JComboBox<String> comboBox1;
+    private javax.swing.JComboBox<String> comboBox2;
+    private javax.swing.JRadioButton engButton;
+    private javax.swing.JRadioButton fraButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextArea outputArea;
+    private javax.swing.JButton performButton;
+    private javax.swing.JButton resetButton;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JLabel searchByLabel;
+    private javax.swing.JLabel searchLabel;
+    private javax.swing.JTextField searchText;
+    private javax.swing.JButton selectionButton;
+    private javax.swing.JTextArea textArea;
+    private javax.swing.JButton viewBButton;
+    private javax.swing.JButton viewIButton;
+    private javax.swing.JLabel viewLabel;
     // End of variables declaration//GEN-END:variables
 }

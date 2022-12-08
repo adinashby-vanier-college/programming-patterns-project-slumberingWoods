@@ -141,4 +141,47 @@ public class LibraryController {
     public LocalDate getBookDate(int index) {
         return books.get(index).getDateOfPurchase();
     }
+    /**
+     * 
+     */
+    public void updateArrays() {
+        Connection con = DatabaseConnection.getConnection();
+        String query = "select * from Students";
+        students = new ArrayList<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = Integer.parseInt(rs.getString("StudentId"));
+                String name = rs.getString("Name");
+                String contact = rs.getString("Contact");
+                Student tempStudent = new Student(id, name, contact);
+                students.add(tempStudent);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+        String query2 = "select * from Books";
+        books = new ArrayList<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query2);
+            System.out.println(rs.toString());
+            while (rs.next()) {
+                String SN = rs.getString("SN");
+                String tempTitle = rs.getString("Title");
+                String author = rs.getString("Author");
+                String publisher = rs.getString("Publisher");
+                double price = Double.parseDouble(rs.getString("Price"));
+                int qte = Integer.parseInt(rs.getString("Quantity"));
+                int issuedQte = Integer.parseInt(rs.getString("Issued"));
+                String tempDate = rs.getString("addedDate");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate localDate = LocalDate.parse(tempDate, formatter);
+                Book tempBook = new Book(SN, tempTitle, author, publisher, price, qte, issuedQte, localDate);
+                books.add(tempBook);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Error");
+        }
+    }
 }

@@ -10,8 +10,10 @@ package com.prog2.labs;
  */
 public class StudentUser implements User {
     StudentForm form;
-    public StudentUser() {
+    int id;
+    public StudentUser(int id) {
         form = new StudentForm();
+        this.id = id;
     }
     
     @Override
@@ -25,6 +27,11 @@ public class StudentUser implements User {
     @Override
     public void hideForm() {
         form.setVisible(false);
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
     
 }

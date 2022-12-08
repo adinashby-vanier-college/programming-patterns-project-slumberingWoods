@@ -5,7 +5,6 @@
 package com.prog2.labs;
 import java.sql.*;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -33,8 +32,6 @@ public class Book {
         this.qte = qte;
         this.issuedQte = issuedQte;
         this.DateOfPurchase = DateOfPurchase;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateOfPurchase.format(formatter);
     }
 
     public String getSN() {
@@ -100,6 +97,13 @@ public class Book {
     public void setDateOfPurchase(LocalDate DateOfPurchase) {
         this.DateOfPurchase = DateOfPurchase;
     }
+    /**
+     * Add book to database
+     * @param book
+     * @return 
+     * Return true if successful else false
+     * @throws java.sql.SQLException
+    */
     public boolean addBook(Book book) throws SQLException {
         String query = "insert into Books(SN, Title, Author, Publisher, Price, Quantity, Issued, addedDate) VALUES('" + book.SN + "','" + book.title 
                 + "','" + book.author + "','" + book.publisher + "','" + book.price + "','" + book.qte 
@@ -115,10 +119,18 @@ public class Book {
         }
         return false;
     }
+    /**
+     * Issue book to student
+     * @param book
+     * @param s
+     * @return
+     * Return true if successful else false
+     * @throws SQLException 
+     */
     public boolean issueBook(Book book, Student s) throws SQLException {
         String query = "Insert into IssuedBooks(SN, StId, StName, StudentContact, IssueDate) VALUES('" + book.SN + "','" + 
                 s.stId + "','" + s.name + "','" + s.contactNumber + "','" + 
-                LocalDate.now().toString() + "','" + "')";
+                LocalDate.now().toString() + "')";
         String query2 = "Update Books set Quantity = Quantity - 1, Issued = Issued + 1 where SN = " + book.SN; 
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate(query);
@@ -131,9 +143,17 @@ public class Book {
         }
         return false;
     }
+    /**
+     * Return book using student
+     * @param book
+     * @param s
+     * @return
+     * Return true if successful else false
+     * @throws SQLException 
+     */
     public boolean returnBook(Book book, Student s) throws SQLException {
         String query = "Update Books set Quantity = Quantity + 1, Issued = Issued - 1 where SN = " + book.SN;
-        String query2 = "DELETE FROM IssuedBooks WHERE SN = " + book.SN + "AND StId = " + s.stId;
+        String query2 = "DELETE FROM IssuedBooks WHERE SN = '" + book.SN + "'AND StId = '" + s.stId + "'";
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate(query);
             stmt.executeUpdate(query2);
@@ -145,6 +165,11 @@ public class Book {
         }
         return false;
     }
+    /**
+     * Get a view of Books
+     * @return 
+     * A Map of IssuedBooks sorted using TreeMap
+     */
     public static Map<String, String> viewCatalog() {
         String query = "select * from Books";
         Map<String, String> books = new TreeMap<>();
@@ -170,6 +195,11 @@ public class Book {
         }
         return books;
     }
+    /**
+     * Get a view of IssuedBooks
+     * @return 
+     * A Map of IssuedBooks sorted using TreeMap
+     */
     public static Map<String, String> viewIssuedBooks() {
         String query = "select * from IssuedBooks";
         Map<String, String> books = new TreeMap<>();
@@ -178,7 +208,7 @@ public class Book {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 String key = rs.getString("SN");
-                String value = rs.getString("id");
+                String value = rs.getString("SN");
                 value += " , " + rs.getString("SN");
                 value += " , " + rs.getString("StId");
                 value += " , " + rs.getString("StName");

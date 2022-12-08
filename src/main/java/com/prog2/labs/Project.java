@@ -17,29 +17,6 @@ public class Project {
 	 *
 	 */
 	public static void main(String[] args) {
-            String query = "select * from Books";
-            Map<String, String> books = new TreeMap<>();
-            Connection tempcon = DatabaseConnection.getConnection();
-            try (Statement stmt = tempcon.createStatement()) {
-                ResultSet rs = stmt.executeQuery(query);
-                while (rs.next()) {
-                    String key = rs.getString("SN");
-                    String value = rs.getString("SN");
-                    value += " , " + rs.getString("Title");
-                    value += " , " + rs.getString("Author");
-                    value += " , " + rs.getString("Publisher");
-                    value += " , " + rs.getString("Price");
-                    value += " , " + rs.getString("Quantity");
-                    value += " , " + rs.getString("Issued");
-                    value += " , " + rs.getString("addedDate");
-                    books.put(key, value);
-                }
-                stmt.close();
-            } catch (SQLException e) {
-                System.out.println("Error");
-            }
-            System.out.println(books.toString());
-
             PickUser pForm = new PickUser();
             
             ViewController viCon = new ViewController(pForm);
@@ -48,7 +25,7 @@ public class Project {
             Controller controller;
             controller = Controller.getInstance(libCon, viCon, fac);
             controller.getViCon().showPForm();
-            
+
 	}
 	/**
 	 * Please refer to the README file for question(s) description
