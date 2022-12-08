@@ -15,21 +15,21 @@ import java.util.*;
  */
 public class Student {
     Connection con = DatabaseConnection.getConnection();
-    String stId;
+    int stId;
     String name;
     String contactNumber;
 
-    public Student(String stId, String name, String contactNumber) {
+    public Student(int stId, String name, String contactNumber) {
         this.stId = stId;
         this.name = name;
         this.contactNumber = contactNumber;
     }
 
-    public String getStId() {
+    public int getStId() {
         return stId;
     }
 
-    public void setStId(String stId) {
+    public void setStId(int stId) {
         this.stId = stId;
     }
 

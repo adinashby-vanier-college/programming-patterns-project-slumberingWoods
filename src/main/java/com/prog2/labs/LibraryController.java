@@ -11,25 +11,21 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 /**
  *
  * @author hallo
  */
 public class LibraryController {
-    UserFactory factory;
     ArrayList<Book> books;
     ArrayList<Student> students;
-
-    public LibraryController(UserFactory factory) {
-        this.factory = factory;
+    public LibraryController() {
         Connection con = DatabaseConnection.getConnection();
         String query = "select * from Students";
         students = new ArrayList<>();
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                String id = rs.getString("StudentId");
+                int id = Integer.parseInt(rs.getString("StudentId"));
                 String name = rs.getString("Name");
                 String contact = rs.getString("Contact");
                 Student tempStudent = new Student(id, name, contact);
@@ -60,6 +56,89 @@ public class LibraryController {
         } catch (SQLException e) {
             System.out.println("Error");
         }
+    }
+
+    public ArrayList<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(ArrayList<Student> students) {
+        this.students = students;
+    }
+    
+    public void setStudentName(int index, String name) {
+        students.get(index).setName(name);
+    }
+    public String getStudentName(int index) {
+        return students.get(index).getName();
+    }
+    public void setStudentId(int index, int id) {
+        students.get(index).setStId(id);
+    }
+    public int getStudentId(int index) {
+        return students.get(index).getStId();
+    }
+    public void setStudentContact(int index, String contact) {
+        students.get(index).setContactNumber(contact);
+    }
+    public String getStudentContact(int index) {
+        return students.get(index).getContactNumber();
+    }
+    public void setBookSN(int index, String SN) {
+        books.get(index).setSN(SN);
+    }
+    public String getBookSN(int index) {
+        return books.get(index).getSN();
+    }
+    public void setBookTitle(int index, String title) {
+        books.get(index).setTitle(title);
+    }
+    public String getBookTitle(int index) {
+        return books.get(index).getTitle();
+    }
+    public void setBookAuthor(int index, String author) {
+        books.get(index).setAuthor(author);
+    }
+    public String getBookAuthor(int index) {
+        return books.get(index).getAuthor();
+    }
+    public void setBookPublisher(int index, String publisher) {
+        books.get(index).setPublisher(publisher);
+    }
+    public String getBookPublisher(int index) {
+        return books.get(index).getPublisher();
+    }
+    public void setBookPrice(int index, double price) {
+        books.get(index).setPrice(price);
+    }
+    public double getBookPrice(int index) {
+        return books.get(index).getPrice();
+    }
+    public void setBookQuantity(int index, int qte) {
+        books.get(index).setQte(qte);
+    }
+    public int getBookQuantity(int index) {
+        return books.get(index).getQte();
+    }
+    public void setBookIssued(int index, int qte ) {
+        books.get(index).setIssuedQte(qte);
+    }
+    public int getBookIssued(int index) {
+        return books.get(index).getIssuedQte();
+    }
+    public void setBookDate(int index, LocalDate date) {
+        books.get(index).setDateOfPurchase(date);
+    }
+    public LocalDate getBookDate(int index) {
+        return books.get(index).getDateOfPurchase();
     }
     
 }
