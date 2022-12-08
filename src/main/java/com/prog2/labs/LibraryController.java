@@ -47,7 +47,7 @@ public class LibraryController {
                 int qte = Integer.parseInt(rs.getString("Quantity"));
                 int issuedQte = Integer.parseInt(rs.getString("Issued"));
                 String tempDate = rs.getString("addedDate");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate localDate = LocalDate.parse(tempDate, formatter);
                 Book tempBook = new Book(SN, tempTitle, author, publisher, price, qte, issuedQte, localDate);
                 books.add(tempBook);

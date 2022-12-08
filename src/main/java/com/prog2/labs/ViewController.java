@@ -20,6 +20,8 @@ public class ViewController {
     }
     public void showPForm() {
         pForm.setVisible(true);
+        sForm.setVisible(false);
+        lForm.setVisible(false);
     }
     public void showLForm() {
         lForm.setVisible(true);

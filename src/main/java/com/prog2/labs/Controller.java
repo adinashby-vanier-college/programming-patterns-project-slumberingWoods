@@ -36,4 +36,29 @@ public class Controller {
         }
          return controller;
     }
+
+    public LibraryController getLibCon() {
+        return libCon;
+    }
+
+    public void setLibCon(LibraryController libCon) {
+        this.libCon = libCon;
+    }
+
+    public ViewController getViCon() {
+        return viCon;
+    }
+
+    public void setViCon(ViewController viCon) {
+        this.viCon = viCon;
+    }
+
+    public UserFactory getFac() {
+        return fac;
+    }
+
+    public void setFac(UserFactory fac) {
+        this.fac = fac;
+    }
+    
 }
